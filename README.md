@@ -62,7 +62,7 @@ fc-cache -fv
 
 ```
 git clone -b late-night-🌃 https://github.com/OverAlexander-MR/Hyperland.git
-cd dots
+cd Hyperland
 cp -r ./configs/* ~/.config/
 ```
 
