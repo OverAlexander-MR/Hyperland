@@ -19,7 +19,7 @@
 - First of all, Install the newest [Hyprland](https://hyprland.org/) using this [guide](https://wiki.hyprland.org/Getting-Started/Installation/) depend on your Distro:
 
   ```zsh
-  yay -S hyprland-git
+   sudo pacman -S hyprland hypridle slurp gtklock
   ```
 
 - For all dependencies, install in Manual [(Manual Build Hyperland)](https://wiki.hyprland.org/Getting-Started/Installation/)
