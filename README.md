@@ -65,9 +65,9 @@ fc-cache -fv
 ## Copy Files 💾
 
 ```
-git clone -b late-night-🌃 https://github.com/OverAlexander-MR/Hyperland.git
-cd Hyperland
-cp -r ./configs/* ~/.config/
+  git clone -b late-night-🌃 https://github.com/OverAlexander-MR/Hyperland.git
+  cd Hyperland
+  cp -r ./configs/* ~/.config/
 ```
 
 > Finally, now you can login with Late Night Hyprland Rice
