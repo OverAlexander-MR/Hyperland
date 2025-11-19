@@ -33,6 +33,10 @@ yay -S waybar rofi dunst kitty swaybg swaylock-fancy-git swayidle pamixer light 
 ```
 
 ### Necessary Font 🔑:
+  ```
+  sudo pacman -S noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra
+  ```
+
 
 - [JetBrains Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/JetBrainsMono.zip)
 
