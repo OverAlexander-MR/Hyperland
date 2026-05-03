@@ -1,6 +1,7 @@
 {
     "height": 30, // Waybar height (to be removed for auto height)
     "layer": "top", // Waybar at top layer
+    "output": ["*"],
     "margin-top": 6,
     "margin-left": 10,
     "margin-bottom": 0,
@@ -98,13 +99,8 @@
       "format-plugged": "  {capacity}%",
       "format-alt": "{icon} {time}",
       "format-full": "  {capacity}%",
-      "format-icons": [" ", " ", " ", " ", " "]
-    },
-    "custom/weather": {
-      "exec": "python3 ~/.config/waybar/scripts/weather.py",
-      "restart-interval": 300,
-      "return-type": "json",
-      "on-click": "xdg-open https://weather.com/en-IN/weather/today/l/a319796a4173829988d68c4e3a5f90c1b6832667ea7aaa201757a1c887ec667a"
+      "format-icons": [" ", " ", " ", " ", " "],
+      "on-click": "kitty --hold -e ~/.config/waybar/scripts/toggle_conservation.sh"
     },
 
    "custom/spotify": {
