@@ -357,27 +357,27 @@ def apply_extend(primary, external, resolution, direction):
     log(f"Ejecutando: {cmd_p}")
     return subprocess.run(cmd_p.split(), capture_output=True, text=True)
 
-def save_to_hyprland_lua(primary, external, mode, resolution=None, direction=None):
-    lua_path = os.path.expanduser('~/.config/hypr/hyprland.lua')
-    if not os.path.exists(lua_path):
-        log(f"No se encontró {lua_path}")
+def save_to_hyprland_conf(primary, external, mode, resolution=None, direction=None):
+    conf_path = os.path.expanduser('~/.config/hypr/hyprland.conf')
+    if not os.path.exists(conf_path):
+        log(f"No se encontró {conf_path}")
         return False
 
     try:
-        with open(lua_path, 'r') as f:
+        with open(conf_path, 'r') as f:
             lines = f.readlines()
 
-        marker = "-- Monitor configuration via HDMI Manager"
+        marker = "# Monitor configuration via HDMI Manager\n"
 
-        # ── Generar nuevas líneas en Lua ──
+        # ── Generar nuevas líneas ──
         p_width = primary.get('width', 1920)
         p_height = primary.get('height', 1080)
         p_rate = f"{primary.get('refreshRate', 60):.2f}"
         p_full_res = f"{p_width}x{p_height}@{p_rate}"
 
         if mode == 'mirror':
-            p_lua = f'hl.monitor({{ output = "{primary["name"]}", mode = "{p_full_res}", position = "0x1080", scale = 1 }})\n'
-            e_lua = f'hl.monitor({{ output = "{external["name"]}", mode = "preferred", position = "auto", scale = 1, mirror = "{primary["name"]}" }})\n'
+            p_conf = f"monitor = {primary['name']},{p_full_res},0x1080,1\n"
+            e_conf = f"monitor = {external['name']},preferred,auto,1,mirror,{primary['name']}\n"
         else:
             res_clean = resolution.split('@')[0] if resolution and '@' in resolution else (resolution or '1920x1080')
             rate = resolution.split('@')[1].replace('Hz', '') if resolution and '@' in resolution else '60'
@@ -397,14 +397,14 @@ def save_to_hyprland_lua(primary, external, mode, resolution=None, direction=Non
             else:
                 p_pos = f"0x-{p_height}"
 
-            e_lua = f'hl.monitor({{ output = "{external["name"]}", mode = "{ext_full_res}", position = "0x0", scale = 1 }})\n'
-            p_lua = f'hl.monitor({{ output = "{primary["name"]}", mode = "{p_full_res}", position = "{p_pos}", scale = 1 }})\n'
+            e_conf = f"monitor = {external['name']},{ext_full_res},0x0,1\n"
+            p_conf = f"monitor = {primary['name']},{p_full_res},{p_pos},1\n"
 
-        new_block = [f"{marker}\n", p_lua, e_lua]
+        new_block = [marker, p_conf, e_conf]
 
         # ── Buscar si ya existe el bloque ──
-        if marker in ''.join(lines):
-            idx = next(i for i, line in enumerate(lines) if marker in line)
+        if marker in lines:
+            idx = lines.index(marker)
 
             # Eliminar bloque existente (comentario + 2 líneas siguientes)
             end = idx + 3
@@ -418,14 +418,14 @@ def save_to_hyprland_lua(primary, external, mode, resolution=None, direction=Non
             lines.extend(new_block)
 
         # ── Guardar ──
-        with open(lua_path, 'w') as f:
+        with open(conf_path, 'w') as f:
             f.writelines(lines)
 
-        log("Configuración Lua actualizada.")
+        log("Configuración actualizada.")
         return True
 
     except Exception as e:
-        log(f"Error guardando configuración Lua: {e}")
+        log(f"Error guardando configuración: {e}")
         return False
 
 
@@ -629,7 +629,7 @@ class HdmiManagerWindow(Gtk.Window):
 
         # ── Opción guardar ──
         save_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        self.save_check = Gtk.CheckButton(label="  Guardar en hyprland.lua")
+        self.save_check = Gtk.CheckButton(label="  Guardar en hyprland.conf")
         self.save_check.get_style_context().add_class('save-check')
         self.save_check.set_active(True)
         save_box.pack_start(self.save_check, False, False, 0)
@@ -778,7 +778,7 @@ class HdmiManagerWindow(Gtk.Window):
                     msg = f"⚠  Error: {result.stderr.strip()}"
                     log(f"Error aplicando: {result.stderr}")
                 elif self.save_check.get_active():
-                    saved = save_to_hyprland_lua(*save_args)
+                    saved = save_to_hyprland_conf(*save_args)
                     if saved:
                         msg += " • Guardado en config"
 

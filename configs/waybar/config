@@ -7,26 +7,32 @@
     "margin-bottom": 0,
     "margin-right": 10,
     "spacing": 5, // Gaps between modules (4px)
-    "modules-left": ["custom/launcher", "cpu", "memory", "hyprland/workspaces", "custom/weather"],
+    "modules-left": ["custom/launcher", "cpu", "memory", "hyprland/workspaces"],
     "modules-center": ["custom/spotify"],
     "modules-right": ["tray", "backlight", "pulseaudio", "network", "battery", "clock", "custom/power-menu"],
     "hyprland/workspaces": {
-      "format": "{icon}",
-      "on-click": "activate",
-      "format-icons": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": "",
-        "5": "",
-        "urgent": "",
-        "active": "",
-        "default": ""
-      }
+      "format": "{name} {windows}",        
+      
+      "window-rewrite": {
+            "class<firefox>": "",
+            "class<code>": "",
+            "class<kitty>": "",
+            "class<Spotify>": ""
+        },
+
+        "window-rewrite-default": "",
+        "tooltip": true,
+        "tooltip-format": "Workspace {id}",
+
+        "all-outputs": false,
+        "show-special": true
+
     },
+    
     "hyprland/window": {
-        "format": "{}"
+         "format": "{class}"
     },
+
     "tray": {
         "spacing": 10
     },
@@ -36,12 +42,11 @@
         "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
     },
 
-    "cpu": {
-      "interval": 10,
-      "format": " {}%",
-      "max-length": 10,
-      "on-click": ""
+      "cpu": {
+        "format": " {usage}%",
+        "interval": 2
     },
+
     "memory": {
         "interval": 30,
         "format": " {}%",
@@ -60,7 +65,6 @@
         "format-disconnected": "睊",
         "on-click": "bash ~/.config/waybar/scripts/rofi-wifi-menu.sh"
     },
-
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-bluetooth": "  {volume}%",
